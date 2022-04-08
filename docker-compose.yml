@@ -1,0 +1,73 @@
+version: "3.7"
+
+services:
+    # image project
+    curso_api_cache:
+        container_name: api-cache_laravel-9
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: especializati/laravel9-app
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        depends_on: 
+            - redis
+        networks: 
+            - api-cache
+    
+    # nginx
+    nginx:
+        container_name: api-cache_nginx
+        image: nginx:alpine
+        restart: unless-stopped
+        ports: 
+            - "8989:80"
+        volumes: 
+            - ./:/var/www
+            - ./docker/nginx/:/etc/nginx/conf.d/
+        networks: 
+            - api-cache
+
+    # db mysql
+    mysql:
+        container_name: api-cache_mysql
+        image: mysql:5.7.22
+        restart: unless-stopped
+        environment: 
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+        volumes: 
+            - ./.docker/mysql/dbdata:/var/lib/mysql
+        ports: 
+            - "3388:3306"
+        networks: 
+            - api-cache
+
+    # queue
+    queue:
+        container_name: api-cache_queue
+        image: especializati/laravel9-app
+        restart: unless-stopped
+        command: "php artisan queue:work"
+        volumes: 
+            - ./:/var/www
+        depends_on: 
+            - redis
+            - api-cache
+        networks: 
+            - api-cache
+
+    # redis
+    redis:
+        container_name: api-cache_redis
+        image: redis:latest
+        networks: 
+            - api-cache
+
+networks: 
+    api-cache:
+        driver: bridge
