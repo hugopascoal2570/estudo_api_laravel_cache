@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Lesson extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name', 'video', 'module_id'];
+
+    public function module()
+    {
+        return $this->belongsTo(Module::class);
+    }
 }

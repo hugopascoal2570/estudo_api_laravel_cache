@@ -2,10 +2,14 @@
 
 namespace App\Providers;
 
-use App\Models\Course;
-use App\Models\Module;
+use App\Models\{
+    Course,
+    Lesson,
+    Module
+};
 use App\Observers\{
     CourseObserver,
+    LessonObserver,
     ModuleObserver
 };
 use Illuminate\Auth\Events\Registered;
@@ -18,7 +22,7 @@ class EventServiceProvider extends ServiceProvider
     /**
      * The event listener mappings for the application.
      *
-     * @var array<class-string, array<int, class-string>>
+     * @var array
      */
     protected $listen = [
         Registered::class => [
@@ -35,16 +39,6 @@ class EventServiceProvider extends ServiceProvider
     {
         Course::observe(CourseObserver::class);
         Module::observe(ModuleObserver::class);
-        //Lesson::observe(LessonObserver::class);
-    }
-
-    /**
-     * Determine if events and listeners should be automatically discovered.
-     *
-     * @return bool
-     */
-    public function shouldDiscoverEvents()
-    {
-        return false;
+        Lesson::observe(LessonObserver::class);
     }
 }
