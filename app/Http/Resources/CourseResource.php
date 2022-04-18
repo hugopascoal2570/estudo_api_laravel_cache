@@ -11,7 +11,7 @@ class CourseResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @return array
      */
     public function toArray($request)
     {
@@ -19,8 +19,8 @@ class CourseResource extends JsonResource
             'identify' => $this->uuid,
             'title' => $this->name,
             'description' => $this->description,
-            'date' => Carbon::make($this->created_at)->format('Y-m-d')
-
+            'date' => Carbon::make($this->created_at)->format('Y-m-d'),
+            'modules' => ModuleResource::collection($this->whenLoaded('modules'))
         ];
     }
 }

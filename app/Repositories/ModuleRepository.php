@@ -17,8 +17,8 @@ class ModuleRepository
     public function getModuleCourse(int $courseId)
     {
         return $this->entity
-            ->where('course_id', $courseId)
-            ->get();
+                        ->where('course_id', $courseId)
+                        ->get();
     }
 
     public function createNewModule(int $courseId, array $data)
@@ -31,16 +31,16 @@ class ModuleRepository
     public function getModuleByCourse(int $courseId, string $identify)
     {
         return $this->entity
-            ->where('course_id', $courseId)
-            ->where('uuid', $identify)
-            ->firstOrfail();
+                    ->where('course_id', $courseId)
+                    ->where('uuid', $identify)
+                    ->firstOrfail();
     }
 
     public function getModuleByUuid(string $identify)
     {
         return $this->entity
-            ->where('uuid', $identify)
-            ->firstOrfail();
+                    ->where('uuid', $identify)
+                    ->firstOrfail();
     }
 
     public function updateModuleByUuid(int $courseId, string $identify, array $data)
@@ -50,7 +50,7 @@ class ModuleRepository
         Cache::forget('courses');
 
         $data['course_id'] = $courseId;
-
+        
 
         return $module->update($data);
     }

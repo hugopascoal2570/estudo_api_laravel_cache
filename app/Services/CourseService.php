@@ -6,14 +6,12 @@ use App\Repositories\CourseRepository;
 
 class CourseService
 {
-
     protected $repository;
 
     public function __construct(CourseRepository $courseRepository)
     {
         $this->repository = $courseRepository;
     }
-
 
     public function getCourses()
     {
@@ -30,7 +28,7 @@ class CourseService
         return $this->repository->getCourseByUuid($identify);
     }
 
-    public function DestroyCourse(string $identify)
+    public function deleteCourse(string $identify)
     {
         return $this->repository->deleteCourseByUuid($identify);
     }

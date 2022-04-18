@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\CourseService;
-use App\Http\Resources\CourseResource;
-use Illuminate\Http\Request;
 use App\Http\Requests\StoreUpdateCourse;
+use App\Http\Resources\CourseResource;
+use App\Services\CourseService;
+use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-
     protected $courseService;
 
     public function __construct(CourseService $courseService)
@@ -18,6 +17,11 @@ class CourseController extends Controller
         $this->courseService = $courseService;
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $courses = $this->courseService->getCourses();
@@ -41,7 +45,7 @@ class CourseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  string  $id
+     * @param  string  $identify
      * @return \Illuminate\Http\Response
      */
     public function show($identify)
@@ -55,24 +59,25 @@ class CourseController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string  $id
+     * @param  string  $identify
      * @return \Illuminate\Http\Response
      */
     public function update(StoreUpdateCourse $request, $identify)
     {
         $this->courseService->updateCourse($identify, $request->validated());
+
         return response()->json(['message' => 'updated']);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $identify
      * @return \Illuminate\Http\Response
      */
     public function destroy($identify)
     {
-        $this->courseService->DestroyCourse($identify);
+        $this->courseService->deleteCourse($identify);
 
         return response()->json([], 204);
     }
